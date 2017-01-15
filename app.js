@@ -10,7 +10,6 @@ window.onload = function(){
 	};
 
 	function displayAccount(user){
-		console.log(user);
 		$('#accountFirstName').val(user.first_name);
 		$('#accountLastName').val(user.last_name);
 		$('#accountEmail').val(user.email);
@@ -18,6 +17,7 @@ window.onload = function(){
 		$('#accountPasswordVerification').val(user.password);
 	};
 
+	//logic for account page
 	if (window.location.pathname.indexOf('account.html') > -1) {
 		//check if we have a logged in user
 		var email = localStorage.getItem("user");
@@ -33,6 +33,12 @@ window.onload = function(){
 			window.location.replace('login.html');
 		}
 	}
+	//logic for hotel page
+	else if(hotelName) {
+		hotelAdvisorDB.open(1,'reviews',function(){
+			//TODO : fetch and display all reviews
+		});
+	}
 
 
 	var adminMenu = '<li><a href="admin.html">View all reviews</a></li><li><a href="account.html">My Account</a></li><li><a id="logout" href="#">Log out</li>';
@@ -41,7 +47,7 @@ window.onload = function(){
 
 	var registerForm = $('#register');
 	var menu = $('#menu');
-
+	var hotelName = $('body').attr('id');
 
 	var loggedUser = localStorage.getItem("user");
 	if (loggedUser === 'admin@test.com'){
@@ -76,8 +82,10 @@ window.onload = function(){
 		var email = $('#emailRegister').val();
 		var password = $('#passwordRegister').val();
 
-		hotelAdvisorDB.createUser(firstName,lastName,email,password,function(user){
-			logIn(user);
+		hotelAdvisorDB.open(1,'users',function(){
+			hotelAdvisorDB.createUser(firstName,lastName,email,password,function(user){
+				logIn(user);
+			});
 		});
 	});
 
@@ -88,8 +96,19 @@ window.onload = function(){
 		var email = $('#accountEmail').val();
 		var password = $('#accountPassword').val();
 
-		hotelAdvisorDB.createUser(firstName,lastName,email,password,function(user){
-			console.log('account updated');
+		hotelAdvisorDB.open(1,'users',function(){
+			hotelAdvisorDB.createUser(firstName,lastName,email,password,function(user){
+				console.log('account updated');
+			});
+		});
+	});
+
+	$('#addReview').on('submit',function(e){
+		var review = $('#reviewText').val();
+		var rating = $('#reviewStarRating').val();
+
+		hotelAdvisorDB.createReview(review,rating,hotelName,loggedUser,'pendingReview',function(review){
+			console.log('review added');
 		});
 	});
 

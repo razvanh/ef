@@ -85,7 +85,6 @@ var hotelAdvisorDB = (function(){
 	hADB.getUser = function(email,callback){
 		//get a reference 
 		var db = datastore;
-
 		//initiate new transaction
 		var transaction = db.transaction(['users'],'readwrite');
 
@@ -98,6 +97,36 @@ var hotelAdvisorDB = (function(){
 			callback(request.result);
 		}
 
+		request.onerror = hADB.onerror;
+	};
+
+	hADB.createReview = function(review,rating,hotel,user,status,callback) {
+		//get a reference 
+		var db = datastore;
+
+		//initiate new transaction
+		var transaction = db.transaction(['reviews'],'readwrite');
+
+		//Get the datastore
+		var objStore = transaction.objectStore('reviews');
+
+		//create user object
+		var review = {
+			'review': review,
+			'rating': rating,
+			'hotel':hotel,
+			'user':user,
+			'status':status
+		};
+
+		var request = objStore.put(review);
+
+		//Handle successful datastore put
+		request.onsuccess = function(e){
+			callback(review);
+		};
+
+		//Handle error
 		request.onerror = hADB.onerror;
 	};
 
