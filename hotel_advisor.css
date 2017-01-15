@@ -132,6 +132,11 @@ h1 {
     font-size:2.488em;
 }
 
+h1 a {
+    text-decoration:none;
+    color:#000;
+}
+
 h2 {
     font-size:2.074em;
 }
@@ -158,17 +163,17 @@ ul.unstyled {
 }
 
 
-.cards, .cards a {
+.card, .card a {
     color:#fff;
 }
 
 
-.cards li {
+.card {
     position:relative;
 
 }
 
-.cards h2 {
+.card h2 {
     font-weight:500;
     text-shadow: 0 0 2px #000;
 }
@@ -185,4 +190,72 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
     bottom:0;
     right:0;
     padding:1em;
+}
+
+.review {
+    border:1px #ccc solid;
+    padding:1em;
+    margin:1em 0;
+    outline:3px solid #f0f0f0; 
+}
+
+.meta {
+    color:#444;
+    font-style: italic;
+}
+
+form {
+    background-color:#f0f0f0;
+    padding:.5em 1em;
+}
+
+input,textarea{
+    font-size:1em;
+    border:1px #ccc solid;
+    border-radius:3px;
+    width:calc(100% - 1em);
+    padding:.5em;
+}
+
+
+button {
+    font-size:1em;
+    background-color:#c00;
+    color:#fff;
+    padding:1em;
+    border:1px #d00 solid;
+    box-shadow: 1px 1px 1px #333;
+    border-radius:3px;
+    text-shadow: 0 0 2px #000;
+}
+
+@media all and (min-width:40em){
+    #menu {
+    text-align:right;
+    }
+
+    #menu li {
+        display:inline-block;
+        margin:.5em;
+    }
+}
+.flex-container {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    margin: -0.5rem;
+}
+
+.flex-container.top {
+    align-items: flex-start;
+}
+
+.flex-container.stretch {
+    align-items: stretch;
+}
+
+
+.flex-container > * {
+    flex:1 0 20rem;
+    margin: 0.5rem;
 }

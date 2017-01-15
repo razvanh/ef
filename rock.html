@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Hotel Rock | HotelAdvisor</title>
+	<link rel="stylesheet" href="hotel_advisor.css">
+</head>
+<body>
+	<header class="flex-container">
+		<h1><a href="index.html">Hotel Advisor</a></h1>
+		<ul id="menu" class="unstyled">
+			<li><a href="login.html">Login</a></li>
+			<li><a href="login.html">Register</a></li>
+		</ul>
+	</header>
+	
+	<div class="card">
+		<img src="images/hotel-rock.jpg" alt="Hotel rock room">
+		<div class="card-details">
+			<h2>Hotel Rock</h2>
+			<p>Rock 'n' roll is more than music. It's a force—a kinetic spirit that's ageless and electric. </p>
+		</div>
+	</div>
+
+	<h2>Reviews</h2>
+	<div class="review">
+		<p>Rock is a fun hotel. There are some really good restaurants, and the dancers are fun to watch. But last night after Britney Spears show ended, we went outside to catch a Lyft, and suddenly there was a smell of sewer gas that made everybody in line start gagging. </p>
+		<p class="meta">
+			Reviewed by John on May 20, 2016
+		</p>
+	</div>
+
+	<div class="review">
+		<p>Rock is a fun hotel. There are some really good restaurants, and the dancers are fun to watch. But last night after Britney Spears show ended, we went outside to catch a Lyft, and suddenly there was a smell of sewer gas that made everybody in line start gagging. </p>
+		<p class="meta">
+			Reviewed by John on May 20, 2016
+		</p>
+	</div>
+
+	<div class="review">
+		<p>Well we booked months before we went and when we tried to check in apparently there was no room for us?! Luckily as it was the hotels mistake they upgraded us to a different room but we then had to chase them for two days whilst we were trying to have fun on holiday to find out what was happening </p>
+		<p class="meta">
+			Reviewed by Mary on January 2, 2017
+		</p>
+	</div>
+
+	<form action="#">
+		<p>
+			<textarea name="review" id="review" rows="10" placeholder="Write your review"></textarea>	
+		</p>
+		
+		<p>
+			<input type="checkbox" id="reccomend">
+			<label for="reccomend">I would reccomend this hotel</label>	
+		</p>
+		
+		<p>
+			<button>Submit review</button>
+		</p>
+
+	</form>
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+	<script src="db.js"></script>
+	<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+window.onload = function(){
+
+	hotelAdvisorDB.open(1,'users');
+
+	function logIn(user){
+		localStorage.setItem("user", user.email);
+		window.location.replace('account.html');
+		return false;
+	};
+
+	function displayAccount(user){
+		console.log("am ajuns la displayAccount");
+		$('accountFirstName').val(user.first_name);
+	};
+
+	if (window.location.pathname === '/Users/razvan/Documents/Git/ef/account.html') {
+		//check if we have a logged in user
+		var email = localStorage.getItem("user");
+		if(email){
+
+			
+
+			hotelAdvisorDB.getUser(email,function(user){
+				logIn(user);
+			});
+		}
+	}
+
+
+	var adminMenu = '<li><a href="admin.html">View all reviews</a></li><li><a href="account.html">My Account</a></li><li><a id="logout" href="#">Log out</li>';
+	var loggedUserMenu = '<li><a href="account.html">My Account</a></li><li><a id="logout" href="#">Log out</li>';
+	var defaultMenu = '<li><a href="login.html">Login</a></li><li><a href="login.html">Register</a></li>';
+
+	var registerForm = $('#register');
+	var menu = $('#menu');
+
+
+	var loggedUser = localStorage.getItem("user");
+	if (loggedUser === 'admin@test.com'){
+		menu.html(adminMenu);
+	}
+
+	else if (loggedUser) {
+		menu.html(loggedUserMenu);
+	}
+
+
+	//Event Listeners
+	$('#logout').on('click', function() {
+	  	localStorage.removeItem("user");
+		menu.html(defaultMenu);
+	});
+
+	$('#register').on('submit',function(e){
+		e.preventDefault();
+		var firstName = $('#firstNameRegister').val();
+		var lastName = $('#lastNameRegister').val();
+		var email = $('#emailRegister').val();
+		var password = $('#passwordRegister').val();
+
+		hotelAdvisorDB.createUser(firstName,lastName,email,password,function(user){
+			logIn(user);
+		});
+	});
+
+
+
+
+};
