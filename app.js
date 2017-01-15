@@ -17,7 +17,7 @@ window.onload = function(){
 		$('#accountPasswordVerification').val(user.password);
 	};
 
-	if (window.location.pathname === '/Users/razvan/Documents/Git/ef/account.html') {
+	if (window.location.pathname.indexOf('account.html') > -1) {
 		//check if we have a logged in user
 		var email = localStorage.getItem("user");
 		if(email){
@@ -56,6 +56,15 @@ window.onload = function(){
 	$('#logout').on('click', function() {
 	  	localStorage.removeItem("user");
 		menu.html(defaultMenu);
+	});
+
+	$('#login').on('submit', function(){
+		var email = $('#loginEmail').val();
+		hotelAdvisorDB.open(1,'users',function(){
+			hotelAdvisorDB.getUser(email,function(user){
+				logIn(user);
+			});
+		});
 	});
 
 	$('#register').on('submit',function(e){
