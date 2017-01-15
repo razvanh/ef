@@ -9,19 +9,22 @@ window.onload = function(){
 	};
 
 	function displayAccount(user){
-		console.log("am ajuns la displayAccount");
-		$('accountFirstName').val(user.first_name);
+		console.log(user);
+		$('#accountFirstName').val(user.first_name);
+		$('#accountLastName').val(user.last_name);
+		$('#accountEmail').val(user.email);
+		$('#accountPassword').val(user.password);
+		$('#accountPasswordVerification').val(user.password);
 	};
 
 	if (window.location.pathname === '/Users/razvan/Documents/Git/ef/account.html') {
 		//check if we have a logged in user
 		var email = localStorage.getItem("user");
 		if(email){
-
-			
-
-			hotelAdvisorDB.getUser(email,function(user){
-				logIn(user);
+			hotelAdvisorDB.open(1,'users',function(){
+				hotelAdvisorDB.getUser(email,function(user){
+					displayAccount(user);
+				});
 			});
 		}
 	}
@@ -62,6 +65,7 @@ window.onload = function(){
 			logIn(user);
 		});
 	});
+
 
 
 

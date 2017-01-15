@@ -6,7 +6,6 @@ var hotelAdvisorDB = (function(){
 	================================= */
 
 	hADB.open = function(version,objectStoreName,callback) {
-
 		//open connection to datastore
 		var request = indexedDB.open(objectStoreName, version);
 
@@ -79,7 +78,6 @@ var hotelAdvisorDB = (function(){
 		var request = objStore.get(email);
 
 		request.onsuccess = function(e){
-			
 			callback(request.result);
 		}
 
