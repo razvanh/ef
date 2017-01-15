@@ -22,6 +22,16 @@ var hotelAdvisorDB = (function(){
 
 			//Create new Datastore
 			var store = db.createObjectStore(objectStoreName,{keyPath:'email'});
+
+			var admin = {
+			'first_name': 'Razvan',
+			'last_name': 'Horeanga',
+			'email':'admin@test.com',
+			'password':'password1',
+			'admin':true
+		};
+
+			store.add(admin);
 		};
 
 		request.onsuccess = function(e){
