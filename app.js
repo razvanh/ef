@@ -27,6 +27,10 @@ window.onload = function(){
 				});
 			});
 		}
+
+		else {
+			window.location.replace('login.html');
+		}
 	}
 
 
@@ -66,6 +70,17 @@ window.onload = function(){
 		});
 	});
 
+	$('#account').on('submit',function(e){
+		e.preventDefault();
+		var firstName = $('#accountFirstName').val();
+		var lastName = $('#accountLastName').val();
+		var email = $('#accountEmail').val();
+		var password = $('#accountPassword').val();
+
+		hotelAdvisorDB.createUser(firstName,lastName,email,password,function(user){
+			console.log('account updated');
+		});
+	});
 
 
 
