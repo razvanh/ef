@@ -56,6 +56,7 @@ window.onload = function(){
 	$('#logout').on('click', function() {
 	  	localStorage.removeItem("user");
 		menu.html(defaultMenu);
+		window.location.replace('login.html');
 	});
 
 	$('#login').on('submit', function(){
