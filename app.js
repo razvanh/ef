@@ -1,6 +1,7 @@
 window.onload = function(){
 
 	hotelAdvisorDB.open(1,'users');
+	hotelAdvisorDB.open(1,'reviews');
 
 	function logIn(user){
 		localStorage.setItem("user", user.email);

@@ -20,18 +20,25 @@ var hotelAdvisorDB = (function(){
 				db.deleteObjectStore(objectStoreName);
 			}
 
-			//Create new Datastore
-			var store = db.createObjectStore(objectStoreName,{keyPath:'email'});
+			if (objectStoreName === 'users') {
+				//Create new Datastore
+				var store = db.createObjectStore(objectStoreName,{keyPath:'email'});
 
-			var admin = {
-			'first_name': 'Razvan',
-			'last_name': 'Horeanga',
-			'email':'admin@test.com',
-			'password':'password1',
-			'admin':true
-		};
+				var admin = {
+				'first_name': 'Razvan',
+				'last_name': 'Horeanga',
+				'email':'admin@test.com',
+				'password':'password1',
+				'admin':true
+				};
 
-			store.add(admin);
+				store.add(admin);
+			}
+
+			else {
+				var store = db.createObjectStore(objectStoreName,{keyPath:'id',autoIncrement:true});
+			}
+
 		};
 
 		request.onsuccess = function(e){
