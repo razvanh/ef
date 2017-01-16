@@ -28,11 +28,18 @@ window.onload = function(){
 	};
 
 	function displayAccount(user){
-		$('#accountFirstName').val(user.first_name);
-		$('#accountLastName').val(user.last_name);
-		$('#accountEmail').val(user.email);
-		$('#accountPassword').val(user.password);
-		$('#accountPasswordVerification').val(user.password);
+		//wrapped in a timeout in order to have .focus() work in Safari
+		// We need .focus because otherwise the placeholder is still visible behind the input fields value in Safari http://stackoverflow.com/questions/40593734/when-changing-the-value-of-a-field-with-javascript-safari-keeps-the-placeholder
+
+		setTimeout(function(){
+			$('#accountFirstName').focus().val(user.first_name);
+			$('#accountLastName').focus().val(user.last_name);
+			$('#accountEmail').focus().val(user.email);
+			$('#accountPassword').focus().val(user.password);
+			$('#accountPasswordVerification').focus().val(user.password);
+			$('#accountPasswordVerification').blur();
+		},10);
+		
 	};
 
 	function displayReviews(reviews){
@@ -173,13 +180,13 @@ window.onload = function(){
 	});
 
 	$('#addReview').on('submit',function(e){
-
+		e.preventDefault();
 		if ($('#addReview').valid()) {
 			var review = $('#reviewText').val();
 			var rating = $('#reviewStarRating').val();
 			hotelAdvisorDB.open('reviews',function(){
 				hotelAdvisorDB.createReview(review,rating,hotelName,loggedUser,'pendingReview',function(review){
-					console.log('review added');
+					window.location.reload();
 				});
 			});
 			

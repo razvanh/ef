@@ -50,7 +50,6 @@ var hotelAdvisorDB = (function(){
 		};
 
 		request.onerror = hADB.onerror;
-		console.log(hADB.onerror);
 	};
 
 	hADB.createUser = function(fName,lName,email,password,callback) {
