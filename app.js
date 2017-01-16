@@ -6,8 +6,10 @@ window.onload = function(){
 	var registerForm = $('#register');
 	var menu = $('#menu');
 	var hotelName = $('body').attr('id');
+	var addReviewForm = $('#addReview');
 
 	var loggedUser = localStorage.getItem("user");
+
 	if (loggedUser === 'admin@test.com'){
 		menu.html(adminMenu);
 	}
@@ -38,7 +40,14 @@ window.onload = function(){
 		var reviewsContainer = $('#reviews');
 
 		for (var i = 0; i < reviews.length; i++) {
-			output += "<div class='review'><p>"+reviews[i].review+"</p><p class='meta'>Star Rating: "+reviews[i].rating+" star(s)</p></div>"
+			if(reviews[i].status === 'approved'){
+				output += "<div class='review'><p>"+reviews[i].review+"</p><p class='meta'>Star Rating: "+reviews[i].rating+" star(s)</p></div>";
+			}
+
+			else if(reviews[i].user === loggedUser){
+				output += "<div class='review'><p><strong>Your review is awaiting moderation:</strong></p><p>"+reviews[i].review+"</p><p class='meta'>Star Rating: "+reviews[i].rating+" star(s)</p></div>";
+				addReviewForm.remove();
+			}
 		}
 
 		reviewsContainer.html(output);
@@ -48,10 +57,10 @@ window.onload = function(){
 	//logic for account page
 	if (window.location.pathname.indexOf('account.html') > -1) {
 		//check if we have a logged in user
-		var email = localStorage.getItem("user");
-		if(email){
+		
+		if(loggedUser){
 			hotelAdvisorDB.open(1,'users',function(){
-				hotelAdvisorDB.getUser(email,function(user){
+				hotelAdvisorDB.getUser(loggedUser,function(user){
 					displayAccount(user);
 				});
 			});
@@ -64,10 +73,20 @@ window.onload = function(){
 	//logic for hotel page
 	else if(hotelName) {
 		hotelAdvisorDB.open(1,'reviews',function(){
-			hotelAdvisorDB.fetchReviews('hotel',hotelName,'approved',function(reviews){
+
+			//get all approved reviews
+			hotelAdvisorDB.fetchReviews('hotel',hotelName,null,function(reviews){
 				displayReviews(reviews);
 			});
+
+			//get all pending reviews
 		});
+
+		if(!loggedUser){
+			addReviewForm.after('<p><a href="login.html">Log in</a> to add review</p>')
+			addReviewForm.remove();
+		}
+
 	}
 
 
