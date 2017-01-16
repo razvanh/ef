@@ -54,7 +54,7 @@ window.onload = function(){
 		}
 		if (reviewed === true) {
 			addReviewForm.remove();
-			output += "<p>You can only submit one review for a hotel.</p>";
+			output += "<p>Your review was approved!.</p>";
 		}
 		reviewsContainer.html(output);
 
@@ -131,9 +131,13 @@ window.onload = function(){
 
 	$('#login').on('submit', function(){
 		var email = $('#loginEmail').val();
+		var password = $('#loginPassword').val();
 		hotelAdvisorDB.open(1,'users',function(){
 			hotelAdvisorDB.getUser(email,function(user){
-				logIn(user);
+				if (password === user.password) {
+					logIn(user);
+				}
+				
 			});
 		});
 	});
