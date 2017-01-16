@@ -152,7 +152,7 @@ var hotelAdvisorDB = (function(){
 
 			if (property === 'user' && result.value.user === propertyValue && result.value.status === status) reviews.push(result.value);
 			else if(property === 'hotel' && result.value.hotel === propertyValue) reviews.push(result.value);
-			else if(property === null && result.value.status === 'pendingReview') reviews.push(result.value);
+			else if(property === null && result.value.status === status) reviews.push(result.value);
 
 			result.continue();
 		}

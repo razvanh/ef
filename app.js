@@ -38,9 +38,11 @@ window.onload = function(){
 	function displayReviews(reviews){
 		var output = '';
 		var reviewsContainer = $('#reviews');
+		var reviewed = false;
 
 		for (var i = 0; i < reviews.length; i++) {
 			if(reviews[i].status === 'approved'){
+				if (reviews[i].user === loggedUser) reviewed = true;
 				output += "<div class='review'><p>"+reviews[i].review+"</p><p class='meta'>Star Rating: "+reviews[i].rating+" star(s)</p></div>";
 			}
 
@@ -48,8 +50,12 @@ window.onload = function(){
 				output += "<div class='review'><p><strong>Your review is awaiting moderation:</strong></p><p>"+reviews[i].review+"</p><p class='meta'>Star Rating: "+reviews[i].rating+" star(s)</p></div>";
 				addReviewForm.remove();
 			}
-		}
 
+		}
+		if (reviewed === true) {
+			addReviewForm.remove();
+			output += "<p>You can only submit one review for a hotel.</p>";
+		}
 		reviewsContainer.html(output);
 
 	};
@@ -105,7 +111,7 @@ window.onload = function(){
 		
 		if (loggedUser === 'admin@test.com') {
 			hotelAdvisorDB.open(1,'reviews',function(){
-				hotelAdvisorDB.fetchReviews(null,null,null,function(reviews){
+				hotelAdvisorDB.fetchReviews(null,null,'pendingReview',function(reviews){
 					displayAdminReviews(reviews);
 				});
 			});
@@ -134,6 +140,7 @@ window.onload = function(){
 
 	$('#register').on('submit',function(e){
 		e.preventDefault();
+		if ($('#register').valid()) {
 		var firstName = $('#firstNameRegister').val();
 		var lastName = $('#lastNameRegister').val();
 		var email = $('#emailRegister').val();
@@ -144,6 +151,7 @@ window.onload = function(){
 				logIn(user);
 			});
 		});
+		}
 	});
 
 	$('#account').on('submit',function(e){
@@ -197,7 +205,63 @@ window.onload = function(){
 		
 	});
 
+	//Form Validation
 
+	$(document).ready(function () {  
 
+		$("#register").validate({
+	    // Specify validation rules
+	    rules: {
+	      // The key name on the left side is the name attribute
+	      // of an input field. Validation rules are defined
+	      // on the right side
+	      firstNameRegister: {
+	      	required: true,
+	      	maxlength: 100
+	      },
+	      lastNameRegister: {
+	      	required: true,
+	      	maxlength: 100
+	      },
+	      emailRegister: {
+	        required: true,
+	        // Specify that email should be validated
+	        // by the built-in "email" rule
+	        email: true
+	      },
+	      passwordRegister: {
+	      	required:true,
+	        minlength: 8
+	      },
+	      confirmPasswordRegister: {
+	      	required:true,
+	        minlength: 8,
+	        equalTo: '#passwordRegister'
+	      }
+	    },
+	    // Specify validation error messages
+	    messages: {
+	      firstNameRegister:{
+	      	required:  "Please enter your first name",
+	      	maxlength: "First name must not exceed 100 characters"
+	      },
+	      lastNameRegister: {
+	      	required:  "Please enter your last name",
+	      	maxlength: "Last name must not exceed 100 characters"
+	      },
+	      passwordRegister: {
+	        required: "Please provide a password",
+	        minlength: "Your password must be at least 8 characters long"
+	      },
+	      confirmPasswordRegister: {
+	        required: "Please verify your password",
+	        minlength: "Your password must be at least 8 characters long",
+	        equalTo: "Password verification does not match"
+	      },
+	      emailRegister: "Please enter a valid email address"
+	    }
+	  	});
+
+	});
 
 };
