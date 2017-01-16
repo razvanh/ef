@@ -169,12 +169,15 @@ window.onload = function(){
 	});
 
 	$('#addReview').on('submit',function(e){
-		var review = $('#reviewText').val();
-		var rating = $('#reviewStarRating').val();
 
-		hotelAdvisorDB.createReview(review,rating,hotelName,loggedUser,'pendingReview',function(review){
-			console.log('review added');
-		});
+		if ($('#addReview').valid()) {
+			var review = $('#reviewText').val();
+			var rating = $('#reviewStarRating').val();
+
+			hotelAdvisorDB.createReview(review,rating,hotelName,loggedUser,'pendingReview',function(review){
+				console.log('review added');
+			});
+		}
 	});
 
 
@@ -206,62 +209,86 @@ window.onload = function(){
 	});
 
 	//Form Validation
-
-	$(document).ready(function () {  
-
-		$("#register").validate({
-	    // Specify validation rules
-	    rules: {
-	      // The key name on the left side is the name attribute
-	      // of an input field. Validation rules are defined
-	      // on the right side
-	      firstNameRegister: {
-	      	required: true,
-	      	maxlength: 100
-	      },
-	      lastNameRegister: {
-	      	required: true,
-	      	maxlength: 100
-	      },
-	      emailRegister: {
-	        required: true,
-	        // Specify that email should be validated
-	        // by the built-in "email" rule
-	        email: true
-	      },
-	      passwordRegister: {
-	      	required:true,
-	        minlength: 8
-	      },
-	      confirmPasswordRegister: {
-	      	required:true,
-	        minlength: 8,
-	        equalTo: '#passwordRegister'
-	      }
-	    },
-	    // Specify validation error messages
-	    messages: {
-	      firstNameRegister:{
-	      	required:  "Please enter your first name",
-	      	maxlength: "First name must not exceed 100 characters"
-	      },
-	      lastNameRegister: {
-	      	required:  "Please enter your last name",
-	      	maxlength: "Last name must not exceed 100 characters"
-	      },
-	      passwordRegister: {
-	        required: "Please provide a password",
-	        minlength: "Your password must be at least 8 characters long"
-	      },
-	      confirmPasswordRegister: {
-	        required: "Please verify your password",
-	        minlength: "Your password must be at least 8 characters long",
-	        equalTo: "Password verification does not match"
-	      },
-	      emailRegister: "Please enter a valid email address"
-	    }
-	  	});
-
+	$("#register").validate({
+		// Specify validation rules
+		rules: {
+		  // The key name on the left side is the name attribute
+		  // of an input field. Validation rules are defined
+		  // on the right side
+		  firstNameRegister: {
+		  	required: true,
+		  	maxlength: 100
+		  },
+		  lastNameRegister: {
+		  	required: true,
+		  	maxlength: 100
+		  },
+		  emailRegister: {
+		    required: true,
+		    // Specify that email should be validated
+		    // by the built-in "email" rule
+		    email: true
+		  },
+		  passwordRegister: {
+		  	required:true,
+		    minlength: 8
+		  },
+		  confirmPasswordRegister: {
+		  	required:true,
+		    minlength: 8,
+		    equalTo: '#passwordRegister'
+		  }
+		},
+		// Specify validation error messages
+		messages: {
+		  firstNameRegister:{
+		  	required:  "Please enter your first name",
+		  	maxlength: "First name must not exceed 100 characters"
+		  },
+		  lastNameRegister: {
+		  	required:  "Please enter your last name",
+		  	maxlength: "Last name must not exceed 100 characters"
+		  },
+		  passwordRegister: {
+		    required: "Please provide a password",
+		    minlength: "Your password must be at least 8 characters long"
+		  },
+		  confirmPasswordRegister: {
+		    required: "Please verify your password",
+		    minlength: "Your password must be at least 8 characters long",
+		    equalTo: "Password verification does not match"
+		  },
+		  emailRegister: "Please enter a valid email address"
+		}
 	});
+
+	$("#addReview").validate({
+		// Specify validation rules
+		rules: {
+		  // The key name on the left side is the name attribute
+		  // of an input field. Validation rules are defined
+		  // on the right side
+		  review: {
+		  	required: true,
+		  	maxlength: 500,
+		  	minlength: 100
+		  },
+		  reviewStarRating: {
+		  	required: true		  }
+		},
+		// Specify validation error messages
+		messages: {
+		  review:{
+		  	required:  "Please enter a review",
+		  	maxlength: "Review must not exceed 500 characters",
+		  	minlength: "Review must be more than 100 characters"
+		  },
+		  reviewStarRating: {
+		  	required:  "Please select your rating",
+		  }
+		}
+	});
+
+
 
 };
