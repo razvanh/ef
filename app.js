@@ -54,6 +54,17 @@ window.onload = function(){
 
 	};
 
+	function displayAdminReviews(reviews){
+		var output = '';
+		var reviewsContainer = $('#admin');
+		for (var i = reviews.length - 1; i >= 0; i--) {
+			output += "<form class='pending-review' action='#' data-review-hotel="+reviews[i].hotel+" data-review-id="+reviews[i].id+" data-review-user="+reviews[i].user+" data-review-rating="+reviews[i].rating+"><p>Star rating:"+reviews[i].rating+"</p><p><textarea>"+reviews[i].review+"</textarea></p><p><button>Approve</button><p></form>"
+		}
+		if (reviews.length > 0) {
+			reviewsContainer.html(output);
+		}
+	};
+
 	//logic for account page
 	if (window.location.pathname.indexOf('account.html') > -1) {
 		//check if we have a logged in user
@@ -89,6 +100,21 @@ window.onload = function(){
 
 	}
 
+	//logic for admin page
+	else if (window.location.pathname.indexOf('admin.html') > -1) {
+		
+		if (loggedUser === 'admin@test.com') {
+			hotelAdvisorDB.open(1,'reviews',function(){
+				hotelAdvisorDB.fetchReviews(null,null,null,function(reviews){
+					displayAdminReviews(reviews);
+				});
+			});
+		}
+
+		else {
+			window.location.replace('login.html');
+		}
+	}
 
 	//Event Listeners
 	$('#logout').on('click', function() {
@@ -141,6 +167,34 @@ window.onload = function(){
 		hotelAdvisorDB.createReview(review,rating,hotelName,loggedUser,'pendingReview',function(review){
 			console.log('review added');
 		});
+	});
+
+
+	$('#admin').on('submit','form',function(e){
+		e.preventDefault();
+
+		var hotel = $(this).attr('data-review-hotel');
+		var id = $(this).attr('data-review-id');
+		var rating = $(this).attr('data-review-rating');
+		var status = 'approved';
+		var user = $(this).attr('data-review-user');
+		var text = $(this).find('textarea').val();
+
+		var review = {
+			'review': text,
+			'id': Number(id),
+			'rating': rating,
+			'hotel':hotel,
+			'user':user,
+			'status':'approved'
+		};
+
+		hotelAdvisorDB.open(1,'reviews',function(){
+			hotelAdvisorDB.updateReview(review,function(){
+				location.reload();
+			});
+		});
+		
 	});
 
 
