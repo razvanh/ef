@@ -130,5 +130,34 @@ var hotelAdvisorDB = (function(){
 		request.onerror = hADB.onerror;
 	};
 
+	hADB.fetchReviews = function(property,propertyValue,status,callback){
+		var db = datastore;
+		var transaction = db.transaction(['reviews'],'readwrite');
+		var objStore = transaction.objectStore('reviews');
+
+		var keyRange = IDBKeyRange.lowerBound(0);
+		var cursorRequest = objStore.openCursor(keyRange);
+
+		var reviews = [];
+
+		transaction.oncomplete = function(e){
+			callback(reviews);
+		};
+
+		cursorRequest.onsuccess = function(e){
+			var result = e.target.result;
+			if(!!result === false){
+				return;
+			}
+
+			if (property === 'user' && result.value.user === propertyValue && result.value.status === status) reviews.push(result.value);
+			else if(property === 'hotel' && result.value.hotel === propertyValue && result.value.status === status) reviews.push(result.value);
+			else if(property === null && result.value.status === 'pendingReview') reviews.push(result.value);
+
+			result.continue();
+		}
+		cursorRequest.onerror = hADB.onerror;
+	};
+
 	return hADB;
 }());

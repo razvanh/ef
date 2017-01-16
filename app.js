@@ -1,4 +1,20 @@
 window.onload = function(){
+	var adminMenu = '<li><a href="admin.html">View all reviews</a></li><li><a href="account.html">My Account</a></li><li><a id="logout" href="#">Log out</li>';
+	var loggedUserMenu = '<li><a href="account.html">My Account</a></li><li><a id="logout" href="#">Log out</li>';
+	var defaultMenu = '<li><a href="login.html">Login</a></li><li><a href="login.html">Register</a></li>';
+
+	var registerForm = $('#register');
+	var menu = $('#menu');
+	var hotelName = $('body').attr('id');
+
+	var loggedUser = localStorage.getItem("user");
+	if (loggedUser === 'admin@test.com'){
+		menu.html(adminMenu);
+	}
+
+	else if (loggedUser) {
+		menu.html(loggedUserMenu);
+	}
 
 	hotelAdvisorDB.open(1,'users');
 	hotelAdvisorDB.open(1,'reviews');
@@ -15,6 +31,18 @@ window.onload = function(){
 		$('#accountEmail').val(user.email);
 		$('#accountPassword').val(user.password);
 		$('#accountPasswordVerification').val(user.password);
+	};
+
+	function displayReviews(reviews){
+		var output = '';
+		var reviewsContainer = $('#reviews');
+
+		for (var i = 0; i < reviews.length; i++) {
+			output += "<div class='review'><p>"+reviews[i].review+"</p><p class='meta'>Star Rating: "+reviews[i].rating+" star(s)</p></div>"
+		}
+
+		reviewsContainer.html(output);
+
 	};
 
 	//logic for account page
@@ -36,26 +64,10 @@ window.onload = function(){
 	//logic for hotel page
 	else if(hotelName) {
 		hotelAdvisorDB.open(1,'reviews',function(){
-			//TODO : fetch and display all reviews
+			hotelAdvisorDB.fetchReviews('hotel',hotelName,'approved',function(reviews){
+				displayReviews(reviews);
+			});
 		});
-	}
-
-
-	var adminMenu = '<li><a href="admin.html">View all reviews</a></li><li><a href="account.html">My Account</a></li><li><a id="logout" href="#">Log out</li>';
-	var loggedUserMenu = '<li><a href="account.html">My Account</a></li><li><a id="logout" href="#">Log out</li>';
-	var defaultMenu = '<li><a href="login.html">Login</a></li><li><a href="login.html">Register</a></li>';
-
-	var registerForm = $('#register');
-	var menu = $('#menu');
-	var hotelName = $('body').attr('id');
-
-	var loggedUser = localStorage.getItem("user");
-	if (loggedUser === 'admin@test.com'){
-		menu.html(adminMenu);
-	}
-
-	else if (loggedUser) {
-		menu.html(loggedUserMenu);
 	}
 
 
