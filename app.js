@@ -173,10 +173,12 @@ window.onload = function(){
 		if ($('#addReview').valid()) {
 			var review = $('#reviewText').val();
 			var rating = $('#reviewStarRating').val();
-
-			hotelAdvisorDB.createReview(review,rating,hotelName,loggedUser,'pendingReview',function(review){
-				console.log('review added');
+			hotelAdvisorDB.open(1,'reviews',function(){
+				hotelAdvisorDB.createReview(review,rating,hotelName,loggedUser,'pendingReview',function(review){
+					console.log('review added');
+				});
 			});
+			
 		}
 	});
 
@@ -209,6 +211,11 @@ window.onload = function(){
 	});
 
 	//Form Validation
+
+	$.validator.addMethod("containsdigit", function(value, element){
+		return this.optional(element) || /\d/.test(value);
+	},'Must contain at least one number');
+
 	$("#register").validate({
 		// Specify validation rules
 		rules: {
@@ -230,6 +237,7 @@ window.onload = function(){
 		    email: true
 		  },
 		  passwordRegister: {
+		  	containsdigit: true,
 		  	required:true,
 		    minlength: 8
 		  },
