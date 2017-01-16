@@ -5,9 +5,9 @@ var hotelAdvisorDB = (function(){
 	* Open connection to datastore
 	================================= */
 
-	hADB.open = function(version,objectStoreName,callback) {
+	hADB.open = function(objectStoreName,callback) {
 		//open connection to datastore
-		var request = indexedDB.open(objectStoreName, version);
+		var request = indexedDB.open(objectStoreName, 1);
 
 		//Datastore upgrades. This is run the first time and when 
 		//upgrading version

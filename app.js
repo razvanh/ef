@@ -18,8 +18,8 @@ window.onload = function(){
 		menu.html(loggedUserMenu);
 	}
 
-	hotelAdvisorDB.open(1,'users');
-	hotelAdvisorDB.open(1,'reviews');
+	hotelAdvisorDB.open('users');
+	hotelAdvisorDB.open('reviews');
 
 	function logIn(user){
 		localStorage.setItem("user", user.email);
@@ -76,7 +76,7 @@ window.onload = function(){
 		//check if we have a logged in user
 		
 		if(loggedUser){
-			hotelAdvisorDB.open(1,'users',function(){
+			hotelAdvisorDB.open('users',function(){
 				hotelAdvisorDB.getUser(loggedUser,function(user){
 					displayAccount(user);
 				});
@@ -89,7 +89,7 @@ window.onload = function(){
 	}
 	//logic for hotel page
 	else if(hotelName) {
-		hotelAdvisorDB.open(1,'reviews',function(){
+		hotelAdvisorDB.open('reviews',function(){
 
 			//get all approved reviews
 			hotelAdvisorDB.fetchReviews('hotel',hotelName,null,function(reviews){
@@ -110,7 +110,7 @@ window.onload = function(){
 	else if (window.location.pathname.indexOf('admin.html') > -1) {
 		
 		if (loggedUser === 'admin@test.com') {
-			hotelAdvisorDB.open(1,'reviews',function(){
+			hotelAdvisorDB.open('reviews',function(){
 				hotelAdvisorDB.fetchReviews(null,null,'pendingReview',function(reviews){
 					displayAdminReviews(reviews);
 				});
@@ -132,7 +132,7 @@ window.onload = function(){
 	$('#login').on('submit', function(){
 		var email = $('#loginEmail').val();
 		var password = $('#loginPassword').val();
-		hotelAdvisorDB.open(1,'users',function(){
+		hotelAdvisorDB.open('users',function(){
 			hotelAdvisorDB.getUser(email,function(user){
 				if (password === user.password) {
 					logIn(user);
@@ -150,7 +150,7 @@ window.onload = function(){
 		var email = $('#emailRegister').val();
 		var password = $('#passwordRegister').val();
 
-		hotelAdvisorDB.open(1,'users',function(){
+		hotelAdvisorDB.open('users',function(){
 			hotelAdvisorDB.createUser(firstName,lastName,email,password,function(user){
 				logIn(user);
 			});
@@ -165,7 +165,7 @@ window.onload = function(){
 		var email = $('#accountEmail').val();
 		var password = $('#accountPassword').val();
 
-		hotelAdvisorDB.open(1,'users',function(){
+		hotelAdvisorDB.open('users',function(){
 			hotelAdvisorDB.createUser(firstName,lastName,email,password,function(user){
 				console.log('account updated');
 			});
@@ -177,7 +177,7 @@ window.onload = function(){
 		if ($('#addReview').valid()) {
 			var review = $('#reviewText').val();
 			var rating = $('#reviewStarRating').val();
-			hotelAdvisorDB.open(1,'reviews',function(){
+			hotelAdvisorDB.open('reviews',function(){
 				hotelAdvisorDB.createReview(review,rating,hotelName,loggedUser,'pendingReview',function(review){
 					console.log('review added');
 				});
@@ -206,7 +206,7 @@ window.onload = function(){
 			'status':'approved'
 		};
 
-		hotelAdvisorDB.open(1,'reviews',function(){
+		hotelAdvisorDB.open('reviews',function(){
 			hotelAdvisorDB.updateReview(review,function(){
 				location.reload();
 			});
