@@ -257,6 +257,6 @@ button {
 
 
 .flex-container > * {
-    flex:1 0 20rem;
+    flex:1 0 19rem;
     margin: 0.5rem;
 }

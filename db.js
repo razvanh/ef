@@ -21,7 +21,7 @@ var hotelAdvisorDB = (function(){
 			}
 
 			if (objectStoreName === 'users') {
-				//Create new Datastore
+				//Create new 'users' Datastore
 				var store = db.createObjectStore(objectStoreName,{keyPath:'email'});
 
 				var admin = {
@@ -31,11 +31,12 @@ var hotelAdvisorDB = (function(){
 				'password':'password1',
 				'admin':true
 				};
-
+				//add admin account in the 'users' datastore
 				store.add(admin);
 			}
 
 			else {
+				//create reviews (or other) datastores
 				var store = db.createObjectStore(objectStoreName,{keyPath:'id',autoIncrement:true});
 			}
 
@@ -45,7 +46,7 @@ var hotelAdvisorDB = (function(){
 			//Get a reference to the DB
 			datastore = e.target.result;
 
-			//execute the callback
+			//execute the callback if passed
 			if(callback) callback();
 		};
 

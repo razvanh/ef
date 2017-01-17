@@ -29,7 +29,7 @@ window.onload = function(){
 
 	function displayAccount(user){
 		//wrapped in a timeout in order to have .focus() work in Safari
-		// We need .focus because otherwise the placeholder is still visible behind the input fields value in Safari http://stackoverflow.com/questions/40593734/when-changing-the-value-of-a-field-with-javascript-safari-keeps-the-placeholder
+		// We need .focus() because otherwise the placeholder text is still visible behind the input fields value in Safari http://stackoverflow.com/questions/40593734/when-changing-the-value-of-a-field-with-javascript-safari-keeps-the-placeholder
 
 		setTimeout(function(){
 			$('#accountFirstName').focus().val(user.first_name);
@@ -42,23 +42,28 @@ window.onload = function(){
 		
 	};
 
+	//displayReviews is used to display the reviews on the hotel page
 	function displayReviews(reviews){
 		var output = '';
 		var reviewsContainer = $('#reviews');
-		var reviewed = false;
+		var reviewed = false; // Variable used for the review submit form logic. 
 
 		for (var i = 0; i < reviews.length; i++) {
+			//add review to output if the status is 'approved'
 			if(reviews[i].status === 'approved'){
-				if (reviews[i].user === loggedUser) reviewed = true;
+				if (reviews[i].user === loggedUser) reviewed = true; // Currently logged in user has already reviewed this hotel
 				output += "<div class='review'><p>"+reviews[i].review+"</p><p class='meta'>Star Rating: "+reviews[i].rating+" star(s)</p></div>";
 			}
-
+			//add the review to the output if it is a review submitted by the user currently logged in.
+			//This is marked as awaiting moderation and can be viewed only by the user that submitted it. The form is also removed since user already submitted review
 			else if(reviews[i].user === loggedUser){
 				output += "<div class='review'><p><strong>Your review is awaiting moderation:</strong></p><p>"+reviews[i].review+"</p><p class='meta'>Star Rating: "+reviews[i].rating+" star(s)</p></div>";
 				addReviewForm.remove();
 			}
 
 		}
+
+		//Since user already submitted a review, hide the form
 		if (reviewed === true) {
 			addReviewForm.remove();
 			output += "<p>Your review was approved!.</p>";
@@ -66,7 +71,7 @@ window.onload = function(){
 		reviewsContainer.html(output);
 
 	};
-
+	//displayAdminReviews is used to show the admin all reviews awaiting moderation
 	function displayAdminReviews(reviews){
 		var output = '';
 		var reviewsContainer = $('#admin');
@@ -80,8 +85,7 @@ window.onload = function(){
 
 	//logic for account page
 	if (window.location.pathname.indexOf('account.html') > -1) {
-		//check if we have a logged in user
-		
+		//check if we have a logged in user & display the account info if true
 		if(loggedUser){
 			hotelAdvisorDB.open('users',function(){
 				hotelAdvisorDB.getUser(loggedUser,function(user){
@@ -91,22 +95,21 @@ window.onload = function(){
 		}
 
 		else {
+			//unauthenticated users are redirected to the login page
 			window.location.replace('login.html');
 		}
 	}
 	//logic for hotel page
 	else if(hotelName) {
 		hotelAdvisorDB.open('reviews',function(){
-
-			//get all approved reviews
+			//get all reviews, approved and pending review. displayReviews will only display approved + pending review by current logged in user
 			hotelAdvisorDB.fetchReviews('hotel',hotelName,null,function(reviews){
 				displayReviews(reviews);
 			});
-
-			//get all pending reviews
 		});
 
 		if(!loggedUser){
+			//hide review submission form for unauthenticated users & direct them to log in.
 			addReviewForm.after('<p><a href="login.html">Log in</a> to add review</p>')
 			addReviewForm.remove();
 		}
@@ -115,7 +118,7 @@ window.onload = function(){
 
 	//logic for admin page
 	else if (window.location.pathname.indexOf('admin.html') > -1) {
-		
+		//only the admin has access to this page. displays all reviews that are pending review
 		if (loggedUser === 'admin@test.com') {
 			hotelAdvisorDB.open('reviews',function(){
 				hotelAdvisorDB.fetchReviews(null,null,'pendingReview',function(reviews){
@@ -125,6 +128,7 @@ window.onload = function(){
 		}
 
 		else {
+			//non-admin is redirected to the login page
 			window.location.replace('login.html');
 		}
 	}
